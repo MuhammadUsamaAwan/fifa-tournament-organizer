@@ -1,5 +1,7 @@
 import { createRootRoute, HeadContent, Outlet, Scripts } from '@tanstack/react-router';
 
+import { siteConfig } from '~/config/site';
+import { getSession } from '~/server/auth';
 import globalCss from '~/styles/global.css?url';
 
 export const Route = createRootRoute({
@@ -13,11 +15,11 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'Fifa Tournament Organizer',
+        title: siteConfig.name,
       },
       {
         name: 'description',
-        content: 'Fifa Tournament Organizer',
+        content: `${siteConfig.name} - Fifa Tournament Organizer`,
       },
     ],
     links: [
@@ -30,6 +32,10 @@ export const Route = createRootRoute({
     ],
   }),
   component: RootComponent,
+  beforeLoad: async () => {
+    const session = await getSession();
+    return { session };
+  },
 });
 
 function RootComponent() {

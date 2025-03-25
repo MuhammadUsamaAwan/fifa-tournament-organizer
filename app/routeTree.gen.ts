@@ -8,63 +8,142 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
+import { Route as webIndexImport } from './routes/(web)/index'
+import { Route as authLayoutImport } from './routes/(auth)/_layout'
+import { Route as authLayoutSigninImport } from './routes/(auth)/_layout/signin'
+
+// Create Virtual Routes
+
+const authImport = createFileRoute('/(auth)')()
 
 // Create/Update Routes
 
-const IndexRoute = IndexImport.update({
-  id: '/',
+const authRoute = authImport.update({
+  id: '/(auth)',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const webIndexRoute = webIndexImport.update({
+  id: '/(web)/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const authLayoutRoute = authLayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => authRoute,
+} as any)
+
+const authLayoutSigninRoute = authLayoutSigninImport.update({
+  id: '/signin',
+  path: '/signin',
+  getParentRoute: () => authLayoutRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/(auth)': {
+      id: '/(auth)'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+      preLoaderRoute: typeof authImport
       parentRoute: typeof rootRoute
+    }
+    '/(auth)/_layout': {
+      id: '/(auth)/_layout'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof authLayoutImport
+      parentRoute: typeof authRoute
+    }
+    '/(web)/': {
+      id: '/(web)/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof webIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/(auth)/_layout/signin': {
+      id: '/(auth)/_layout/signin'
+      path: '/signin'
+      fullPath: '/signin'
+      preLoaderRoute: typeof authLayoutSigninImport
+      parentRoute: typeof authLayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface authLayoutRouteChildren {
+  authLayoutSigninRoute: typeof authLayoutSigninRoute
+}
+
+const authLayoutRouteChildren: authLayoutRouteChildren = {
+  authLayoutSigninRoute: authLayoutSigninRoute,
+}
+
+const authLayoutRouteWithChildren = authLayoutRoute._addFileChildren(
+  authLayoutRouteChildren,
+)
+
+interface authRouteChildren {
+  authLayoutRoute: typeof authLayoutRouteWithChildren
+}
+
+const authRouteChildren: authRouteChildren = {
+  authLayoutRoute: authLayoutRouteWithChildren,
+}
+
+const authRouteWithChildren = authRoute._addFileChildren(authRouteChildren)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof webIndexRoute
+  '/signin': typeof authLayoutSigninRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof webIndexRoute
+  '/signin': typeof authLayoutSigninRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
+  '/(auth)': typeof authRouteWithChildren
+  '/(auth)/_layout': typeof authLayoutRouteWithChildren
+  '/(web)/': typeof webIndexRoute
+  '/(auth)/_layout/signin': typeof authLayoutSigninRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/signin'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/signin'
+  id:
+    | '__root__'
+    | '/(auth)'
+    | '/(auth)/_layout'
+    | '/(web)/'
+    | '/(auth)/_layout/signin'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  authRoute: typeof authRouteWithChildren
+  webIndexRoute: typeof webIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  authRoute: authRouteWithChildren,
+  webIndexRoute: webIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +156,29 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/(auth)",
+        "/(web)/"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/(auth)": {
+      "filePath": "(auth)",
+      "children": [
+        "/(auth)/_layout"
+      ]
+    },
+    "/(auth)/_layout": {
+      "filePath": "(auth)/_layout.tsx",
+      "parent": "/(auth)",
+      "children": [
+        "/(auth)/_layout/signin"
+      ]
+    },
+    "/(web)/": {
+      "filePath": "(web)/index.tsx"
+    },
+    "/(auth)/_layout/signin": {
+      "filePath": "(auth)/_layout/signin.tsx",
+      "parent": "/(auth)/_layout"
     }
   }
 }
