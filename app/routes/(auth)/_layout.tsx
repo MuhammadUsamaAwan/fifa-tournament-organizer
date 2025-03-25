@@ -1,8 +1,8 @@
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
 
 import { siteConfig } from '~/config/site';
-import { Image } from '~/components/image';
 import { Logo } from '~/components/logo';
+import { Image } from '~/components/ui/image';
 import LoginImage from '~/assets/images/login.jpg?w=786;1080;1400;2160&format=avif&as=picture';
 
 export const Route = createFileRoute('/(auth)/_layout')({

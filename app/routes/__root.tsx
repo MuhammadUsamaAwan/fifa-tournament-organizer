@@ -2,6 +2,7 @@ import { createRootRoute, HeadContent, Outlet, Scripts } from '@tanstack/react-r
 
 import { siteConfig } from '~/config/site';
 import { getSession } from '~/server/auth';
+import { Toaster } from '~/components/ui/sonner';
 import globalCss from '~/styles/global.css?url';
 
 export const Route = createRootRoute({
@@ -54,6 +55,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+        <Toaster />
         <Scripts />
       </body>
     </html>

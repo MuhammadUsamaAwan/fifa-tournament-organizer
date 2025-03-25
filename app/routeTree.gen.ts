@@ -15,7 +15,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as webIndexImport } from './routes/(web)/index'
 import { Route as authLayoutImport } from './routes/(auth)/_layout'
-import { Route as authLayoutSigninImport } from './routes/(auth)/_layout/signin'
+import { Route as authLayoutLoginImport } from './routes/(auth)/_layout/login'
 
 // Create Virtual Routes
 
@@ -39,9 +39,9 @@ const authLayoutRoute = authLayoutImport.update({
   getParentRoute: () => authRoute,
 } as any)
 
-const authLayoutSigninRoute = authLayoutSigninImport.update({
-  id: '/signin',
-  path: '/signin',
+const authLayoutLoginRoute = authLayoutLoginImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => authLayoutRoute,
 } as any)
 
@@ -70,11 +70,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof webIndexImport
       parentRoute: typeof rootRoute
     }
-    '/(auth)/_layout/signin': {
-      id: '/(auth)/_layout/signin'
-      path: '/signin'
-      fullPath: '/signin'
-      preLoaderRoute: typeof authLayoutSigninImport
+    '/(auth)/_layout/login': {
+      id: '/(auth)/_layout/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof authLayoutLoginImport
       parentRoute: typeof authLayoutImport
     }
   }
@@ -83,11 +83,11 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface authLayoutRouteChildren {
-  authLayoutSigninRoute: typeof authLayoutSigninRoute
+  authLayoutLoginRoute: typeof authLayoutLoginRoute
 }
 
 const authLayoutRouteChildren: authLayoutRouteChildren = {
-  authLayoutSigninRoute: authLayoutSigninRoute,
+  authLayoutLoginRoute: authLayoutLoginRoute,
 }
 
 const authLayoutRouteWithChildren = authLayoutRoute._addFileChildren(
@@ -106,12 +106,12 @@ const authRouteWithChildren = authRoute._addFileChildren(authRouteChildren)
 
 export interface FileRoutesByFullPath {
   '/': typeof webIndexRoute
-  '/signin': typeof authLayoutSigninRoute
+  '/login': typeof authLayoutLoginRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof webIndexRoute
-  '/signin': typeof authLayoutSigninRoute
+  '/login': typeof authLayoutLoginRoute
 }
 
 export interface FileRoutesById {
@@ -119,20 +119,20 @@ export interface FileRoutesById {
   '/(auth)': typeof authRouteWithChildren
   '/(auth)/_layout': typeof authLayoutRouteWithChildren
   '/(web)/': typeof webIndexRoute
-  '/(auth)/_layout/signin': typeof authLayoutSigninRoute
+  '/(auth)/_layout/login': typeof authLayoutLoginRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/signin'
+  fullPaths: '/' | '/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/signin'
+  to: '/' | '/login'
   id:
     | '__root__'
     | '/(auth)'
     | '/(auth)/_layout'
     | '/(web)/'
-    | '/(auth)/_layout/signin'
+    | '/(auth)/_layout/login'
   fileRoutesById: FileRoutesById
 }
 
@@ -170,14 +170,14 @@ export const routeTree = rootRoute
       "filePath": "(auth)/_layout.tsx",
       "parent": "/(auth)",
       "children": [
-        "/(auth)/_layout/signin"
+        "/(auth)/_layout/login"
       ]
     },
     "/(web)/": {
       "filePath": "(web)/index.tsx"
     },
-    "/(auth)/_layout/signin": {
-      "filePath": "(auth)/_layout/signin.tsx",
+    "/(auth)/_layout/login": {
+      "filePath": "(auth)/_layout/login.tsx",
       "parent": "/(auth)/_layout"
     }
   }
