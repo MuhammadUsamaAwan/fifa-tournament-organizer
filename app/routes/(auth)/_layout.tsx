@@ -8,7 +8,7 @@ import LoginImage from '~/assets/images/login.jpg?w=786;1080;1400;2160&format=av
 export const Route = createFileRoute('/(auth)/_layout')({
   component: RouteComponent,
   beforeLoad: ({ context }) => {
-    if (context.session) {
+    if (context) {
       throw redirect({ to: '/' });
     }
   },
