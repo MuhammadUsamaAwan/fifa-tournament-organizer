@@ -5,8 +5,9 @@ import { serverEnv } from '~/config/serverEnv';
 export default defineConfig({
   out: './migrations',
   schema: './app/db/schema.ts',
-  dialect: 'postgresql',
+  dialect: 'turso',
   dbCredentials: {
-    url: serverEnv.DATABASE_URL,
+    url: serverEnv.TURSO_DATABASE_URL,
+    authToken: serverEnv.TURSO_AUTH_TOKEN,
   },
 });

@@ -17,7 +17,7 @@
     "shadcn:add": "pnpm dlx shadcn@canary add"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^0.10.4",
+    "@libsql/client": "^0.15.1",
     "@tailwindcss/vite": "^4.0.15",
     "@tanstack/react-router": "^1.114.27",
     "@tanstack/react-start": "^1.114.27",

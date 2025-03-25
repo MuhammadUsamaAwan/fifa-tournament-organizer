@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 const serverEnvSchema = z.object({
-  DATABASE_URL: z.string().url(),
+  TURSO_DATABASE_URL: z.string().min(1),
+  TURSO_AUTH_TOKEN: z.string().min(1),
   BETTER_AUTH_SECRET: z.string().min(1),
   BETTER_AUTH_URL: z.string().min(1),
 });
