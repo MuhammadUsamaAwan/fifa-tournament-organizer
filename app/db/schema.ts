@@ -1,4 +1,4 @@
-import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 export const usersTable = sqliteTable('user', {
   id: text('id').primaryKey(),
@@ -54,3 +54,49 @@ export const verificationsTable = sqliteTable('verification', {
   createdAt: integer('created_at', { mode: 'timestamp' }),
   updatedAt: integer('updated_at', { mode: 'timestamp' }),
 });
+
+export const playersTable = sqliteTable('player', {
+  id: text('id')
+    .primaryKey()
+    .$default(() => crypto.randomUUID()),
+  name: text('name').notNull(),
+  email: text('email'),
+  phone: text('phone'),
+  address: text('address'),
+});
+
+export const tournamentsTable = sqliteTable('tournament', {
+  id: text('id')
+    .primaryKey()
+    .$default(() => crypto.randomUUID()),
+  name: text('name').notNull(),
+  description: text('description'),
+  startTimestamp: integer('start_date', { mode: 'timestamp' }).notNull(),
+});
+
+export const matchesTable = sqliteTable(
+  'match',
+  {
+    tournamentId: text('tournament_id')
+      .notNull()
+      .references(() => tournamentsTable.id, { onDelete: 'cascade' }),
+    player1Id: text('player1_id')
+      .notNull()
+      .references(() => playersTable.id, { onDelete: 'set null' }),
+    player2Id: text('player2_id')
+      .notNull()
+      .references(() => playersTable.id, { onDelete: 'set null' }),
+    player1Team: text('player1_team'),
+    player2Team: text('player2_team'),
+    player1Score: integer('player1_score'),
+    player2Score: integer('player2_score'),
+    winnerId: text('winner_id').references(() => playersTable.id, { onDelete: 'set null' }),
+    bracket: text('bracket', { enum: ['winners', 'losers'] }).notNull(),
+    round: integer('round'),
+    status: text('status', { enum: ['pending', 'in_progress', 'completed'] })
+      .notNull()
+      .default('pending'),
+    startTimestamp: integer('start_date', { mode: 'timestamp' }).notNull(),
+  },
+  t => [primaryKey({ columns: [t.tournamentId, t.player1Id, t.player2Id] })]
+);

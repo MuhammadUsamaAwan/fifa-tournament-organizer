@@ -14,10 +14,10 @@ function RouteComponent() {
   const router = useRouter();
 
   return (
-    <div>
-      <header>
+    <>
+      <header className='border-b'>
         <div className='container mx-auto flex h-14 items-center justify-between'>
-          <Logo href='/' />
+          <Logo to='/' />
           {session ? (
             <Button
               variant='outline'
@@ -34,7 +34,9 @@ function RouteComponent() {
           )}
         </div>
       </header>
-      <Outlet />
-    </div>
+      <main className='container mx-auto pt-10'>
+        <Outlet />
+      </main>
+    </>
   );
 }

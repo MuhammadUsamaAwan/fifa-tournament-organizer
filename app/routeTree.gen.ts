@@ -16,6 +16,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as webLayoutImport } from './routes/(web)/_layout'
 import { Route as authLayoutImport } from './routes/(auth)/_layout'
 import { Route as webLayoutIndexImport } from './routes/(web)/_layout/index'
+import { Route as webLayoutNewTournamentImport } from './routes/(web)/_layout/new-tournament'
 import { Route as authLayoutLoginImport } from './routes/(auth)/_layout/login'
 
 // Create Virtual Routes
@@ -48,6 +49,12 @@ const authLayoutRoute = authLayoutImport.update({
 const webLayoutIndexRoute = webLayoutIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => webLayoutRoute,
+} as any)
+
+const webLayoutNewTournamentRoute = webLayoutNewTournamentImport.update({
+  id: '/new-tournament',
+  path: '/new-tournament',
   getParentRoute: () => webLayoutRoute,
 } as any)
 
@@ -96,6 +103,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authLayoutLoginImport
       parentRoute: typeof authLayoutImport
     }
+    '/(web)/_layout/new-tournament': {
+      id: '/(web)/_layout/new-tournament'
+      path: '/new-tournament'
+      fullPath: '/new-tournament'
+      preLoaderRoute: typeof webLayoutNewTournamentImport
+      parentRoute: typeof webLayoutImport
+    }
     '/(web)/_layout/': {
       id: '/(web)/_layout/'
       path: '/'
@@ -131,10 +145,12 @@ const authRouteChildren: authRouteChildren = {
 const authRouteWithChildren = authRoute._addFileChildren(authRouteChildren)
 
 interface webLayoutRouteChildren {
+  webLayoutNewTournamentRoute: typeof webLayoutNewTournamentRoute
   webLayoutIndexRoute: typeof webLayoutIndexRoute
 }
 
 const webLayoutRouteChildren: webLayoutRouteChildren = {
+  webLayoutNewTournamentRoute: webLayoutNewTournamentRoute,
   webLayoutIndexRoute: webLayoutIndexRoute,
 }
 
@@ -155,11 +171,13 @@ const webRouteWithChildren = webRoute._addFileChildren(webRouteChildren)
 export interface FileRoutesByFullPath {
   '/': typeof webLayoutIndexRoute
   '/login': typeof authLayoutLoginRoute
+  '/new-tournament': typeof webLayoutNewTournamentRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof webLayoutIndexRoute
   '/login': typeof authLayoutLoginRoute
+  '/new-tournament': typeof webLayoutNewTournamentRoute
 }
 
 export interface FileRoutesById {
@@ -169,14 +187,15 @@ export interface FileRoutesById {
   '/(web)': typeof webRouteWithChildren
   '/(web)/_layout': typeof webLayoutRouteWithChildren
   '/(auth)/_layout/login': typeof authLayoutLoginRoute
+  '/(web)/_layout/new-tournament': typeof webLayoutNewTournamentRoute
   '/(web)/_layout/': typeof webLayoutIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login'
+  fullPaths: '/' | '/login' | '/new-tournament'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login'
+  to: '/' | '/login' | '/new-tournament'
   id:
     | '__root__'
     | '/(auth)'
@@ -184,6 +203,7 @@ export interface FileRouteTypes {
     | '/(web)'
     | '/(web)/_layout'
     | '/(auth)/_layout/login'
+    | '/(web)/_layout/new-tournament'
     | '/(web)/_layout/'
   fileRoutesById: FileRoutesById
 }
@@ -235,12 +255,17 @@ export const routeTree = rootRoute
       "filePath": "(web)/_layout.tsx",
       "parent": "/(web)",
       "children": [
+        "/(web)/_layout/new-tournament",
         "/(web)/_layout/"
       ]
     },
     "/(auth)/_layout/login": {
       "filePath": "(auth)/_layout/login.tsx",
       "parent": "/(auth)/_layout"
+    },
+    "/(web)/_layout/new-tournament": {
+      "filePath": "(web)/_layout/new-tournament.tsx",
+      "parent": "/(web)/_layout"
     },
     "/(web)/_layout/": {
       "filePath": "(web)/_layout/index.tsx",
